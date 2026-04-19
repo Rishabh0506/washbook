@@ -36,18 +36,15 @@ export default async function BookingsPage() {
   // Also fetch floors to map the floor_id
   const { data: floors } = await supabase.from('floors').select('*')
 
-  const bookings = bookingsRaw?.map(b => {
-    // @ts-ignore
-    const machine = b.machines;
-    // @ts-ignore
-    const floor = floors?.find(f => f.floor_id === machine?.floor_id);
+  const bookings = (bookingsRaw || []).map(b => {
+    const machine = (b.machines as any);
+    const floor = (floors as any[])?.find((f: any) => f.floor_id === machine?.floor_id);
     return {
       ...b,
       machineName: machine?.name || 'Unknown',
       floorLabel: floor?.label || 'Unknown Floor'
     }
-  }) || [];
-
+  });
   const upcomingBookings = bookings.filter(b => b.status === 'upcoming' && new Date(b.slot_start).getTime() > new Date().getTime());
   const pastBookings = bookings.filter(b => b.status !== 'upcoming' || new Date(b.slot_start).getTime() <= new Date().getTime());
 
@@ -154,7 +151,7 @@ export default async function BookingsPage() {
               </div>
               <div>
                 <span className={`text-xs font-semibold px-2 py-1 rounded-md uppercase tracking-wider ${b.status === 'cancelled' ? 'bg-red-100 text-red-700' :
-                    b.status === 'no_show' ? 'bg-orange-100 text-orange-700' : 'bg-slate-200 text-slate-700'
+                  b.status === 'no_show' ? 'bg-orange-100 text-orange-700' : 'bg-slate-200 text-slate-700'
                   }`}>
                   {b.status}
                 </span>
