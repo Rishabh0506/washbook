@@ -62,8 +62,8 @@ export default function BookingSheet({ machine, activeSession, isOpen, onClose }
         currentStart.setMinutes(currentStart.getMinutes() + remainder, 0, 0);
       }
     } else {
-      // Round up to the next 15-minute mark for empty idle machines
-      const remainder = 15 - (currentStart.getMinutes() % 15);
+      // Round up to the next 5-minute mark for empty idle machines
+      const remainder = currentStart.getMinutes() % 5 === 0 ? 0 : 5 - (currentStart.getMinutes() % 5);
       currentStart.setMinutes(currentStart.getMinutes() + remainder, 0, 0);
     }
 
@@ -181,9 +181,9 @@ export default function BookingSheet({ machine, activeSession, isOpen, onClose }
                             }
                         `}
                     >
-                        <span>{slot.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        <span>{slot.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', timeZone: 'Asia/Kolkata'})}</span>
                         <span className={`text-xs ${isSelected ? 'text-blue-500' : 'text-slate-400'}`}>
-                            to {slot.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            to {slot.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', timeZone: 'Asia/Kolkata'})}
                         </span>
                     </button>
                   )
