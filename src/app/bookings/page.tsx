@@ -124,11 +124,11 @@ export default async function BookingsPage() {
                     <Clock className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-800">{new Date(b.slot_start).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
+                    <h3 className="text-lg font-bold text-slate-800">{new Date(b.slot_start).toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric', timeZone: 'Asia/Kolkata' })}</h3>
                     <p className="text-blue-600 font-semibold text-lg mt-0.5">
-                      {new Date(b.slot_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(b.slot_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })}
                       <span className="text-slate-400 text-sm font-normal mx-2">to</span>
-                      {new Date(b.slot_end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(b.slot_end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })}
                     </p>
                     <p className="text-slate-500 font-medium mt-2 text-sm flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-slate-300" />
@@ -150,7 +150,7 @@ export default async function BookingsPage() {
             <div key={b.booking_id} className="bg-slate-50 rounded-xl border border-slate-200 p-4 flex justify-between items-center opacity-80">
               <div>
                 <p className="font-semibold text-slate-700">
-                  {new Date(b.slot_start).toLocaleDateString()} at {new Date(b.slot_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(b.slot_start).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })} at {new Date(b.slot_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })}
                 </p>
                 <p className="text-sm text-slate-500">{b.machineName}</p>
               </div>

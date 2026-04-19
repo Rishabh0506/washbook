@@ -8,7 +8,7 @@ export default function CancelBookingButton({ bookingId, slotStart }: { bookingI
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const isCancellable = new Date(slotStart).getTime() - 15 * 60000 > new Date().getTime();
+    const isCancellable = true;
 
     const handleCancel = async () => {
         if (!confirm('Cancel this booking?')) return;
@@ -24,13 +24,6 @@ export default function CancelBookingButton({ bookingId, slotStart }: { bookingI
         }
     };
 
-    if (!isCancellable) {
-        return (
-            <p className="text-xs text-red-500 font-medium whitespace-nowrap mt-4 sm:mt-0">
-                Cannot cancel <br/> (&lt; 15 mins left)
-            </p>
-        );
-    }
 
     return (
         <button 
