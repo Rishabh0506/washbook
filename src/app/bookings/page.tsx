@@ -96,6 +96,11 @@ export default async function BookingsPage() {
         <Link href="/bookings" className="flex-1 py-3 text-center text-sm font-bold text-blue-600 border-b-2 border-blue-600">
           My Bookings
         </Link>
+        {profile?.role === 'admin' && (
+          <Link href="/admin" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+            Admin
+          </Link>
+        )}
       </div>
 
       <main className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">

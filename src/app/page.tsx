@@ -79,6 +79,21 @@ export default async function Dashboard() {
         </div>
       </nav>
 
+      {/* Mobile Nav */}
+      <div className="sm:hidden bg-white border-b border-slate-200 flex">
+        <Link href="/" className="flex-1 py-3 text-center text-sm font-bold text-blue-600 border-b-2 border-blue-600">
+          Dashboard
+        </Link>
+        <Link href="/bookings" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+          My Bookings
+        </Link>
+        {profile?.role === 'admin' && (
+          <Link href="/admin" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+            Admin
+          </Link>
+        )}
+      </div>
+
       {/* Main Dashboard Content */}
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex justify-between items-center">
