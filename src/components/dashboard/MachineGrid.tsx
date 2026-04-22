@@ -7,9 +7,10 @@ interface MachineGridProps {
   floors: Floor[];
   onMachineClick: (machine: Machine, floorLabel: string) => void;
   globalActiveSessions: GlobalSession[];
+  currentUserId: string;
 }
 
-export default function MachineGrid({ machines, floors, onMachineClick, globalActiveSessions }: MachineGridProps) {
+export default function MachineGrid({ machines, floors, onMachineClick, globalActiveSessions, currentUserId }: MachineGridProps) {
   if (machines.length === 0) {
     return (
       <div className="py-12 text-center bg-white rounded-xl border border-slate-200 border-dashed">
@@ -32,6 +33,7 @@ export default function MachineGrid({ machines, floors, onMachineClick, globalAc
             activeSession={activeSess || null}
             floorLabel={floorLabel}
             onClick={() => onMachineClick(machine, floorLabel)}
+            currentUserId={currentUserId}
           />
         );
       })}

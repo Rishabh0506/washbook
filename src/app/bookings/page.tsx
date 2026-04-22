@@ -48,41 +48,41 @@ export default async function BookingsPage() {
   const upcomingBookings = bookings.filter(b => b.status === 'upcoming' && new Date(b.slot_start).getTime() > new Date().getTime());
   const pastBookings = bookings.filter(b => b.status !== 'upcoming' || new Date(b.slot_start).getTime() <= new Date().getTime());
 
-  const toIST = (utcString: string) => {
-    const date = new Date(utcString);
-    return new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
-  };
+  // Use Intl native timezone formatting instead of manual math
+  const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', month: 'short', day: 'numeric' });
+  const formatTime = (dateStr: string) => new Date(dateStr).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
+  const formatShortDate = (dateStr: string) => new Date(dateStr).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Top Navbar */}
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-30">
+      <nav className="bg-blue-600 border-b border-blue-700 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-6">
-              <span className="text-xl font-bold text-blue-600">WashBook</span>
+              <span className="text-xl font-bold text-white">WashBook</span>
               <div className="hidden sm:flex space-x-1">
-                <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 transition-colors">
+                <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-700 flex items-center gap-2 transition-colors">
                   <Home className="h-4 w-4" /> Dashboard
                 </Link>
-                <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-bold text-blue-700 bg-blue-50 flex items-center gap-2">
+                <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-bold text-white bg-blue-700 flex items-center gap-2">
                   <Calendar className="h-4 w-4" /> My Bookings
                 </Link>
                 {profile?.role === 'admin' && (
-                  <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors border border-transparent hover:border-rose-100">
+                  <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-bold text-rose-300 hover:text-rose-100 hover:bg-blue-700 flex items-center gap-2 transition-colors border border-transparent">
                     <ShieldAlert className="h-4 w-4" /> Admin Console
                   </Link>
                 )}
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-slate-700 hidden sm:block">
+              <span className="text-sm font-medium text-blue-100 hidden sm:block">
                 {profile?.name}
               </span>
               <form action="/auth/signout" method="post">
                 <button
                   type="submit"
-                  className="p-2 text-slate-500 hover:text-red-600 transition-colors rounded-full hover:bg-slate-100"
+                  className="p-2 text-blue-200 hover:text-white transition-colors rounded-full hover:bg-blue-700"
                   aria-label="Log Out"
                 >
                   <LogOut className="h-5 w-5" />
@@ -129,11 +129,11 @@ export default async function BookingsPage() {
                     <Clock className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-800">{toIST(b.slot_start).toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric' })}</h3>
+                    <h3 className="text-lg font-bold text-slate-800">{formatDate(b.slot_start)}</h3>
                     <p className="text-blue-600 font-semibold text-lg mt-0.5">
-                      {toIST(b.slot_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {formatTime(b.slot_start)}
                       <span className="text-slate-400 text-sm font-normal mx-2">to</span>
-                      {toIST(b.slot_end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {formatTime(b.slot_end)}
                     </p>
                     <p className="text-slate-500 font-medium mt-2 text-sm flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-slate-300" />
@@ -155,7 +155,7 @@ export default async function BookingsPage() {
             <div key={b.booking_id} className="bg-slate-50 rounded-xl border border-slate-200 p-4 flex justify-between items-center opacity-80">
               <div>
                 <p className="font-semibold text-slate-700">
-                  {toIST(b.slot_start).toLocaleDateString('en-IN')} at {toIST(b.slot_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {formatShortDate(b.slot_start)} at {formatTime(b.slot_start)}
                 </p>
                 <p className="text-sm text-slate-500">{b.machineName}</p>
               </div>

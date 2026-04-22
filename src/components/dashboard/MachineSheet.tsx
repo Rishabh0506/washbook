@@ -2,12 +2,14 @@
 
 import { Machine, Floor } from '@/types/database';
 import { WashingMachine, X, CheckCircle, AlertCircle, Clock } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import type { GlobalSession } from './DashboardClient';
 
 interface MachineSheetProps {
   machine: Machine | null;
+  activeSession?: GlobalSession | null;
   floorLabel: string;
   isOpen: boolean;
   onClose: () => void;
@@ -15,10 +17,38 @@ interface MachineSheetProps {
   hasActiveSession: boolean;
 }
 
-export default function MachineSheet({ machine, floorLabel, isOpen, onClose, onOpenBooking, hasActiveSession }: MachineSheetProps) {
+export default function MachineSheet({ machine, activeSession, floorLabel, isOpen, onClose, onOpenBooking, hasActiveSession }: MachineSheetProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState<string>('');
   const router = useRouter();
+
+  useEffect(() => {
+    if (!activeSession?.start_time || machine?.status !== 'occupied') {
+      setTimeLeft('');
+      return;
+    }
+
+    const calculateTime = () => {
+      const startTime = new Date(activeSession.start_time).getTime();
+      const endTime = startTime + 45 * 60 * 1000; // 45 mins total
+      const now = new Date().getTime();
+      const diff = endTime - now;
+
+      if (diff <= 0) {
+        const lateMinutes = Math.floor(Math.abs(diff) / 1000 / 60);
+        setTimeLeft(`Late by ${lateMinutes} min${lateMinutes === 1 ? '' : 's'}`);
+        return;
+      }
+      
+      const minutes = Math.floor(diff / 1000 / 60);
+      setTimeLeft(`${minutes} min${minutes === 1 ? '' : 's'} left`);
+    };
+
+    calculateTime();
+    const interval = setInterval(calculateTime, 60000);
+    return () => clearInterval(interval);
+  }, [machine?.status, activeSession]);
 
   if (!isOpen || !machine) return null;
 
@@ -100,15 +130,20 @@ export default function MachineSheet({ machine, floorLabel, isOpen, onClose, onO
                   <span className="font-bold text-slate-800 flex items-center gap-1.5"><Clock className="h-4 w-4"/> 45 mins</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-500">Cost</span>
-                  <span className="font-bold text-slate-800">Free</span>
+                  <span className="text-sm font-medium text-slate-500">Status</span>
+                  <span className="font-semibold text-green-700 bg-green-100 px-2.5 py-0.5 rounded-md text-xs">Available</span>
                 </div>
               </div>
             ) : isOccupied ? (
-              <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-2xl mb-6 bg-slate-50">
-                <Clock className="h-10 w-10 text-red-400 mx-auto mb-3 opacity-80" />
-                <p className="text-slate-600 font-medium">This machine is currently running.</p>
-                <p className="text-sm text-slate-400 mt-1">Please select an available machine.</p>
+              <div className="py-8 text-center border-2 border-dashed border-red-200 rounded-2xl mb-6 bg-red-50">
+                <Clock className="h-10 w-10 text-red-500 mx-auto mb-3 opacity-90" />
+                <p className="text-red-700 font-bold text-lg mb-1">
+                  Occupied by {activeSession?.profiles?.name?.split(' ')[0] || 'Unknown'}
+                </p>
+                <div className="inline-flex items-center gap-2 bg-red-100 text-red-800 px-3 py-1.5 rounded-full font-medium text-sm mt-2 border border-red-200">
+                  <Clock className="h-4 w-4" />
+                  {timeLeft || 'Calculating...'}
+                </div>
               </div>
             ) : (
                 <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-2xl mb-6 bg-slate-50">

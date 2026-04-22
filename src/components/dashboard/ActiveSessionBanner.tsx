@@ -68,6 +68,14 @@ export default function ActiveSessionBanner({ session, machine, floorLabel }: Ac
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full mix-blend-overlay pointer-events-none" />
 
+      {/* Someone is waiting alert */}
+      {session.notified_at && new Date().getTime() - new Date(session.notified_at).getTime() < 10 * 60 * 1000 && (
+        <div className="mb-4 bg-red-500/90 border border-red-400 rounded-xl p-3 flex items-center justify-center gap-2 animate-pulse shadow-sm relative z-10">
+          <AlertCircle className="h-5 w-5 text-white" />
+          <span className="font-bold text-sm tracking-wide">Someone is waiting! Please end your session and free the machine.</span>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center relative z-10 gap-4">
         <div className="flex items-center gap-4">
           <div className="bg-white/20 p-3 rounded-full backdrop-blur-sm">

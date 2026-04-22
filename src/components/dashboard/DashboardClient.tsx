@@ -7,6 +7,7 @@ import FloorTabs from './FloorTabs';
 import MachineGrid from './MachineGrid';
 import MachineSheet from './MachineSheet';
 import ActiveSessionBanner from './ActiveSessionBanner';
+import UpcomingBookingBanner from './UpcomingBookingBanner';
 import BookingSheet from './BookingSheet';
 import PushNotificationPrompt from './PushNotificationPrompt';
 import { useRouter } from 'next/navigation';
@@ -18,10 +19,11 @@ interface DashboardClientProps {
   initialFloors: Floor[];
   initialSession: Session | null;
   initialActiveSessions: GlobalSession[];
+  initialUpcomingBooking?: any;
   userId: string;
 }
 
-export default function DashboardClient({ initialMachines, initialFloors, initialSession, initialActiveSessions, userId }: DashboardClientProps) {
+export default function DashboardClient({ initialMachines, initialFloors, initialSession, initialActiveSessions, initialUpcomingBooking, userId }: DashboardClientProps) {
   const [machines, setMachines] = useState<Machine[]>(initialMachines);
   const [activeSession, setActiveSession] = useState<Session | null>(initialSession);
   const [globalActiveSessions, setGlobalActiveSessions] = useState<GlobalSession[]>(initialActiveSessions);
@@ -139,12 +141,14 @@ export default function DashboardClient({ initialMachines, initialFloors, initia
       )}
 
       {/* Banner */}
-      {activeSession && activeMachine && (
+      {activeSession && activeMachine ? (
         <ActiveSessionBanner 
           session={activeSession}
           machine={activeMachine}
           floorLabel={activeFloorLabel}
         />
+      ) : initialUpcomingBooking && (
+        <UpcomingBookingBanner booking={initialUpcomingBooking} />
       )}
 
       {/* Tabs */}
@@ -160,11 +164,13 @@ export default function DashboardClient({ initialMachines, initialFloors, initia
         floors={floors} 
         onMachineClick={handleMachineClick}
         globalActiveSessions={globalActiveSessions}
+        currentUserId={userId}
       />
 
       {/* Overlay Sheet */}
       <MachineSheet 
         machine={selectedMachine}
+        activeSession={globalActiveSessions.find(s => s.machine_id === selectedMachine?.machine_id) || null}
         floorLabel={selectedFloorLabel}
         isOpen={isSheetOpen}
         onClose={() => setIsSheetOpen(false)}
