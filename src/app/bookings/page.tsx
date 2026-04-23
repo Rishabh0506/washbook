@@ -1,8 +1,9 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { LogOut, Home, Calendar, Clock, AlertCircle, ShieldAlert } from 'lucide-react'
+import { LogOut, Home, Calendar, Clock, AlertCircle, ShieldAlert, LayoutGrid } from 'lucide-react'
 import Link from 'next/link'
 import CancelBookingButton from './CancelBookingButton'
+import { formatMachineName } from '@/utils/machine'
 
 export default async function BookingsPage() {
   const supabase = await createClient()
@@ -41,7 +42,7 @@ export default async function BookingsPage() {
     const floor = (floors as any[])?.find((f: any) => f.floor_id === machine?.floor_id);
     return {
       ...b,
-      machineName: machine?.name || 'Unknown',
+      machineName: formatMachineName(machine?.name || 'Unknown'),
       floorLabel: floor?.label || 'Unknown Floor'
     }
   });
@@ -54,35 +55,38 @@ export default async function BookingsPage() {
   const formatShortDate = (dateStr: string) => new Date(dateStr).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#fdf7f2]">
       {/* Top Navbar */}
-      <nav className="bg-blue-600 border-b border-blue-700 sticky top-0 z-30">
+      <nav className="bg-[#005d5d] border-b border-[#004d4d] sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-6">
-              <span className="text-xl font-bold text-white">WashBook</span>
+              <span className="text-xl font-extrabold tracking-tight">
+                <span className="text-white">Laundry</span>
+                <span className="text-[#eab308]">Link</span>
+              </span>
               <div className="hidden sm:flex space-x-1">
-                <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-700 flex items-center gap-2 transition-colors">
-                  <Home className="h-4 w-4" /> Dashboard
+                <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors">
+                  <LayoutGrid className="h-4 w-4" /> Dashboard
                 </Link>
-                <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-bold text-white bg-blue-700 flex items-center gap-2">
-                  <Calendar className="h-4 w-4" /> My Bookings
+                <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-bold text-[#ff8c61] bg-white/10 flex items-center gap-2 border-b-2 border-[#ff8c61]">
+                  My Bookings
                 </Link>
                 {profile?.role === 'admin' && (
-                  <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-bold text-rose-300 hover:text-rose-100 hover:bg-blue-700 flex items-center gap-2 transition-colors border border-transparent">
+                  <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-bold text-rose-300 hover:text-rose-100 hover:bg-white/5 flex items-center gap-2 transition-colors border border-transparent">
                     <ShieldAlert className="h-4 w-4" /> Admin Console
                   </Link>
                 )}
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-blue-100 hidden sm:block">
+              <span className="text-sm font-medium text-white/80 hidden sm:block">
                 {profile?.name}
               </span>
               <form action="/auth/signout" method="post">
                 <button
                   type="submit"
-                  className="p-2 text-blue-200 hover:text-white transition-colors rounded-full hover:bg-blue-700"
+                  className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/5"
                   aria-label="Log Out"
                 >
                   <LogOut className="h-5 w-5" />
@@ -95,14 +99,17 @@ export default async function BookingsPage() {
 
       {/* Mobile Nav */}
       <div className="sm:hidden bg-white border-b border-slate-200 flex">
-        <Link href="/" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+        <Link href="/" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent flex flex-col items-center gap-1">
+          <LayoutGrid className="h-5 w-5 opacity-40" />
           Dashboard
         </Link>
-        <Link href="/bookings" className="flex-1 py-3 text-center text-sm font-bold text-blue-600 border-b-2 border-blue-600">
+        <Link href="/bookings" className="flex-1 py-3 text-center text-sm font-bold text-[#ff8c61] border-b-2 border-[#ff8c61] flex flex-col items-center gap-1">
+          <Calendar className="h-5 w-5" />
           My Bookings
         </Link>
         {profile?.role === 'admin' && (
-          <Link href="/admin" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+          <Link href="/admin" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent flex flex-col items-center gap-1">
+            <ShieldAlert className="h-5 w-5 opacity-40" />
             Admin
           </Link>
         )}
@@ -116,21 +123,21 @@ export default async function BookingsPage() {
             <Calendar className="h-12 w-12 text-slate-300 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-slate-700 mb-1">No upcoming bookings</h3>
             <p className="text-slate-500 max-w-sm mx-auto">You haven't scheduled any laundry sessions for the future. You can book slots from the dashboard.</p>
-            <Link href="/" className="inline-flex items-center gap-2 mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+            <Link href="/" className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-gradient-to-r from-[#65b27b] to-[#2e9e9e] text-white rounded-xl font-bold hover:shadow-lg transition">
               Go to Dashboard
             </Link>
           </div>
         ) : (
           <div className="space-y-4 mb-12">
             {upcomingBookings.map(b => (
-              <div key={b.booking_id} className="bg-white rounded-2xl border border-blue-100 shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div key={b.booking_id} className="bg-white rounded-2xl border border-teal-50 shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
-                  <div className="bg-blue-50 text-blue-600 p-3 rounded-full hidden sm:block">
+                  <div className="bg-teal-50 text-teal-600 p-3 rounded-full hidden sm:block">
                     <Clock className="h-6 w-6" />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-slate-800">{formatDate(b.slot_start)}</h3>
-                    <p className="text-blue-600 font-semibold text-lg mt-0.5">
+                    <p className="text-teal-600 font-bold text-lg mt-0.5">
                       {formatTime(b.slot_start)}
                       <span className="text-slate-400 text-sm font-normal mx-2">to</span>
                       {formatTime(b.slot_end)}

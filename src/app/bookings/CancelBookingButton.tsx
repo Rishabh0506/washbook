@@ -11,13 +11,12 @@ export default function CancelBookingButton({ bookingId, slotStart }: { bookingI
     const isCancellable = true;
 
     const handleCancel = async () => {
-        if (!confirm('Cancel this booking?')) return;
         setLoading(true);
         const supabase = createClient();
         const { error } = await supabase.rpc('cancel_booking', { p_booking_id: bookingId });
 
         if (error) {
-            alert(error.message);
+            console.error('Failed to cancel booking:', error.message);
             setLoading(false);
         } else {
             router.refresh();

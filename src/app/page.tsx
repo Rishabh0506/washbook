@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { LogOut, Home, Calendar, ShieldAlert } from 'lucide-react'
+import { LogOut, Home, Calendar, ShieldAlert, LayoutGrid } from 'lucide-react'
 import DashboardClient from '@/components/dashboard/DashboardClient'
 
 export default async function Dashboard() {
@@ -68,35 +68,38 @@ export default async function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#fdf7f2]">
       {/* Top Navbar */}
-      <nav className="bg-blue-600 border-b border-blue-700">
+      <nav className="bg-[#005d5d] border-b border-[#004d4d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-6">
-              <span className="text-xl font-bold text-white">WashBook</span>
+              <span className="text-xl font-extrabold tracking-tight">
+                <span className="text-white">Laundry</span>
+                <span className="text-[#eab308]">Link</span>
+              </span>
               <div className="hidden sm:flex space-x-1">
-                 <Link href="/" className="px-3 py-2 rounded-md text-sm font-bold text-white bg-blue-700 flex items-center gap-2">
-                    <Home className="h-4 w-4" /> Dashboard
+                 <Link href="/" className="px-3 py-2 rounded-md text-sm font-bold text-[#ff8c61] bg-white/10 flex items-center gap-2 border-b-2 border-[#ff8c61]">
+                    <LayoutGrid className="h-4 w-4" /> Dashboard
                  </Link>
-                 <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-700 flex items-center gap-2 transition-colors">
-                    <Calendar className="h-4 w-4" /> My Bookings
+                 <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors">
+                    My Bookings
                  </Link>
                  {profile?.role === 'admin' && (
-                    <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-bold text-rose-300 hover:text-rose-100 hover:bg-blue-700 flex items-center gap-2 transition-colors border border-transparent">
+                    <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-bold text-rose-300 hover:text-rose-100 hover:bg-white/5 flex items-center gap-2 transition-colors border border-transparent">
                       <ShieldAlert className="h-4 w-4" /> Admin Console
                     </Link>
                  )}
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-blue-100 hidden sm:block">
+              <span className="text-sm font-medium text-white/80 hidden sm:block">
                 {profile?.name || session.user.email}
               </span>
               <form action="/auth/signout" method="post">
                 <button 
                   type="submit" 
-                  className="p-2 text-blue-200 hover:text-white transition-colors rounded-full hover:bg-blue-700"
+                  className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/5"
                   aria-label="Log Out"
                 >
                   <LogOut className="h-5 w-5" />
@@ -109,14 +112,17 @@ export default async function Dashboard() {
 
       {/* Mobile Nav */}
       <div className="sm:hidden bg-white border-b border-slate-200 flex">
-        <Link href="/" className="flex-1 py-3 text-center text-sm font-bold text-blue-600 border-b-2 border-blue-600">
+        <Link href="/" className="flex-1 py-3 text-center text-sm font-bold text-[#ff8c61] border-b-2 border-[#ff8c61] flex flex-col items-center gap-1">
+          <LayoutGrid className="h-5 w-5" />
           Dashboard
         </Link>
-        <Link href="/bookings" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+        <Link href="/bookings" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent flex flex-col items-center gap-1">
+          <Calendar className="h-5 w-5 opacity-40" />
           My Bookings
         </Link>
         {profile?.role === 'admin' && (
-          <Link href="/admin" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent">
+          <Link href="/admin" className="flex-1 py-3 text-center text-sm font-medium text-slate-500 border-b-2 border-transparent flex flex-col items-center gap-1">
+            <ShieldAlert className="h-5 w-5 opacity-40" />
             Admin
           </Link>
         )}
@@ -136,8 +142,8 @@ export default async function Dashboard() {
           <div className="relative z-20 h-full flex flex-col justify-center px-8 text-white bg-black/20">
             <h2 className="text-3xl font-black mb-2 drop-shadow-lg tracking-tight uppercase">
               <span className="text-white">TAP. </span>
-              <span className="text-[#9bd4ee]">BOOK. </span>
-              <span className="text-[#e7e120]">DONE.</span>
+              <span className="text-[#36b3b3]">BOOK. </span>
+              <span className="text-[#ffb700]">DONE.</span>
             </h2>
             <p className="text-base text-slate-100 opacity-90 max-w-xs drop-shadow-md">Real-time laundry tracking for smart living spaces.</p>
           </div>

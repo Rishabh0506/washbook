@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import type { GlobalSession } from './DashboardClient';
+import { formatMachineName } from '@/utils/machine';
 
 interface MachineSheetProps {
   machine: Machine | null;
@@ -94,7 +95,7 @@ export default function MachineSheet({ machine, activeSession, floorLabel, isOpe
                 <WashingMachine className="h-8 w-8" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-slate-800">{machine.name}</h2>
+                <h2 className="text-2xl font-bold text-slate-800">{formatMachineName(machine.name)}</h2>
                 <p className="text-slate-500 font-medium">{floorLabel}</p>
               </div>
             </div>
@@ -157,7 +158,7 @@ export default function MachineSheet({ machine, activeSession, floorLabel, isOpe
               disabled={!isAvailable || loading || hasActiveSession}
               className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2
                 ${isAvailable && !hasActiveSession
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0' 
+                  ? 'bg-gradient-to-r from-[#65b27b] to-[#2e9e9e] text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0' 
                   : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
             >
               {loading ? (
@@ -174,7 +175,7 @@ export default function MachineSheet({ machine, activeSession, floorLabel, isOpe
             
             <button 
               onClick={onOpenBooking}
-              className="w-full py-3 font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-2xl transition-colors border border-blue-100"
+              className="w-full py-3 font-semibold text-teal-600 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 rounded-2xl transition-colors border border-teal-100"
             >
               Book for Later
             </button>

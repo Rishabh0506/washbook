@@ -5,6 +5,7 @@ import { Calendar, X, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { formatMachineName } from '@/utils/machine';
 
 interface BookingSheetProps {
   machine: Machine | null;
@@ -135,12 +136,12 @@ export default function BookingSheet({ machine, activeSession, isOpen, onClose }
         <div className="px-6 py-6 sm:p-8 flex-shrink-0 border-b border-slate-100">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 text-blue-600 rounded-full">
+              <div className="p-3 bg-teal-50 text-teal-600 rounded-full">
                 <Calendar className="h-6 w-6" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-slate-800">Book Slot</h2>
-                <p className="text-slate-500 text-sm font-medium">{machine.name} • 45 min duration</p>
+                <p className="text-slate-500 text-sm font-medium">{formatMachineName(machine.name)} • 45 min duration</p>
               </div>
             </div>
             <button onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors">
@@ -176,13 +177,13 @@ export default function BookingSheet({ machine, activeSession, isOpen, onClose }
                             ${slot.isConflict 
                                 ? 'border-slate-100 bg-slate-100 text-slate-400 cursor-not-allowed opacity-60' 
                                 : isSelected
-                                ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm'
-                                : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-slate-50'
+                                ? 'border-teal-600 bg-teal-50 text-teal-700 shadow-sm'
+                                : 'border-slate-200 bg-white text-slate-700 hover:border-teal-300 hover:bg-slate-50'
                             }
                         `}
                     >
                         <span>{slot.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', timeZone: 'Asia/Kolkata'})}</span>
-                        <span className={`text-xs ${isSelected ? 'text-blue-500' : 'text-slate-400'}`}>
+                        <span className={`text-xs ${isSelected ? 'text-teal-500' : 'text-slate-400'}`}>
                             to {slot.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', timeZone: 'Asia/Kolkata'})}
                         </span>
                     </button>
@@ -199,7 +200,7 @@ export default function BookingSheet({ machine, activeSession, isOpen, onClose }
               disabled={!selectedSlot || loading}
               className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2
                 ${selectedSlot && !loading
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:-translate-y-0.5' 
+                  ? 'bg-gradient-to-r from-[#65b27b] to-[#2e9e9e] text-white shadow-lg hover:-translate-y-0.5' 
                   : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
             >
               {loading ? 'Processing...' : 'Confirm Booking'}

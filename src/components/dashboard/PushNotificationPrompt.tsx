@@ -85,17 +85,17 @@ export default function PushNotificationPrompt({ userId }: { userId: string }) {
   if (!showPrompt) return null;
 
   return (
-    <div className="mb-6 bg-slate-900 rounded-2xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div className="mb-6 bg-white rounded-2xl p-4 sm:p-5 text-slate-800 shadow-lg border border-teal-50 relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       {/* Decorative background element */}
-      <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500 opacity-20 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute -top-10 -right-10 w-32 h-32 bg-teal-500 opacity-10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="flex items-start gap-4 relative z-10">
-        <div className="bg-blue-500/20 p-3 rounded-full flex-shrink-0">
-          <BellRing className="h-6 w-6 text-blue-400 animate-pulse" />
+        <div className="bg-teal-50 p-3 rounded-full flex-shrink-0">
+          <BellRing className="h-6 w-6 text-teal-600 animate-pulse" />
         </div>
         <div>
           <h3 className="font-bold text-lg leading-tight">Enable Push Notifications?</h3>
-          <p className="text-slate-400 text-sm mt-1 max-w-md">
+          <p className="text-slate-500 text-sm mt-1 max-w-md">
             Get instant alerts when your laundry cycle finishes or when your advance booking is about to start.
           </p>
         </div>
@@ -105,13 +105,13 @@ export default function PushNotificationPrompt({ userId }: { userId: string }) {
         <button
           onClick={subscribeUser}
           disabled={loading}
-          className="flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 hover:bg-blue-500 transition-colors rounded-xl text-sm font-bold text-white shadow-sm"
+          className="flex-1 sm:flex-none px-6 py-2.5 bg-gradient-to-r from-[#65b27b] to-[#2e9e9e] hover:shadow-md transition-all rounded-xl text-sm font-bold text-white"
         >
           {loading ? 'Enabling...' : 'Enable Alerts'}
         </button>
         <button
           onClick={() => setShowPrompt(false)}
-          className="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+          className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-colors"
           aria-label="Dismiss"
         >
           <X className="h-5 w-5" />

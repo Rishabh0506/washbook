@@ -64,20 +64,23 @@ export default async function AdminPage() {
   const floors = floorsRaw || []
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100">
+    <div className="min-h-screen bg-[#fdf7f2] text-slate-800">
       {/* Top Navbar */}
-      <nav className="bg-slate-950 border-b border-slate-800 sticky top-0 z-30">
+      <nav className="bg-[#005d5d] border-b border-[#004d4d] sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-6">
-              <span className="text-xl font-bold flex items-center gap-2 text-rose-500">
-                <ShieldAlert className="h-6 w-6" /> WashBook Admin
+               <span className="text-xl font-extrabold tracking-tight flex items-center gap-2">
+                <ShieldAlert className="h-6 w-6 text-[#ff8c61]" />
+                <span className="text-white">Laundry</span>
+                <span className="text-[#eab308]">Link</span>
+                <span className="text-white/60 font-medium ml-1">Admin</span>
                </span>
               <div className="hidden sm:flex space-x-1">
-                 <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 flex items-center gap-2 transition-colors">
+                 <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors">
                     <Home className="h-4 w-4" /> Dashboard
                  </Link>
-                 <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 flex items-center gap-2 transition-colors">
+                 <Link href="/bookings" className="px-3 py-2 rounded-md text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors">
                     <Calendar className="h-4 w-4" /> My Bookings
                  </Link>
               </div>
@@ -91,12 +94,11 @@ export default async function AdminPage() {
         </div>
       </nav>
 
-      {/* Mobile Nav */}
-      <div className="sm:hidden bg-slate-950 border-b border-slate-800 flex">
-        <Link href="/" className="flex-1 py-3 text-center text-sm font-medium text-slate-400 border-b-2 border-transparent">
+      <div className="sm:hidden bg-[#004d40] border-b border-[#003d33] flex">
+        <Link href="/" className="flex-1 py-3 text-center text-sm font-medium text-white/70 border-b-2 border-transparent">
           Dashboard
         </Link>
-        <div className="flex-1 py-3 text-center text-sm font-bold text-rose-500 border-b-2 border-rose-500 flex items-center justify-center gap-2">
+        <div className="flex-1 py-3 text-center text-sm font-bold text-[#ff8c61] border-b-2 border-[#ff8c61] flex items-center justify-center gap-2">
            <ShieldAlert className="h-4 w-4" /> Admin
         </div>
       </div>
@@ -105,29 +107,29 @@ export default async function AdminPage() {
         
         {/* Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                 <p className="text-slate-400 font-medium text-sm mb-1">Total Machines</p>
-                <p className="text-3xl font-bold">{metrics.total}</p>
+                <p className="text-3xl font-bold text-slate-800">{metrics.total}</p>
             </div>
-            <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                 <p className="text-slate-400 font-medium text-sm mb-1">Available</p>
                 <div className="flex items-baseline gap-2">
-                     <p className="text-3xl font-bold text-green-400">{metrics.free}</p>
-                     <span className="w-2 h-2 rounded-full bg-green-500" />
+                     <p className="text-3xl font-bold text-teal-600">{metrics.free}</p>
+                     <span className="w-2 h-2 rounded-full bg-teal-500" />
                 </div>
             </div>
-            <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                 <p className="text-slate-400 font-medium text-sm mb-1">In Use</p>
                 <div className="flex items-baseline gap-2">
-                     <p className="text-3xl font-bold text-amber-500">{metrics.occupied}</p>
-                     <Activity className="h-4 w-4 text-amber-500 animate-pulse" />
+                     <p className="text-3xl font-bold text-[#ff8c61]">{metrics.occupied}</p>
+                     <Activity className="h-4 w-4 text-[#ff8c61] animate-pulse" />
                 </div>
             </div>
-            <div className="bg-slate-800/50 rounded-2xl p-5 border border-red-500/30 ring-1 ring-inset ring-red-500/20">
+            <div className="bg-white rounded-2xl p-5 border border-rose-100 shadow-sm ring-1 ring-inset ring-rose-50">
                 <p className="text-slate-400 font-medium text-sm mb-1">Maintenance</p>
                 <div className="flex items-baseline gap-2">
-                     <p className="text-3xl font-bold text-rose-500">{metrics.maintenance}</p>
-                     <AlertTriangle className="h-4 w-4 text-rose-500" />
+                     <p className="text-3xl font-bold text-rose-600">{metrics.maintenance}</p>
+                     <AlertTriangle className="h-4 w-4 text-rose-600" />
                 </div>
             </div>
         </div>

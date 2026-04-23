@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { PlayCircle, Calendar, AlertCircle } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { formatMachineName } from '@/utils/machine';
 
 interface UpcomingBookingBannerProps {
   booking: any;
@@ -49,7 +50,7 @@ export default function UpcomingBookingBanner({ booking }: UpcomingBookingBanner
   const displayDate = isToday ? 'Today' : new Date(booking.slot_start).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric' });
 
   return (
-    <div className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-800 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+    <div className="mb-6 bg-gradient-to-r from-[#004d40] to-[#00695c] rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
       <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-5 rounded-full mix-blend-overlay pointer-events-none" />
 
       {error && (
@@ -66,17 +67,17 @@ export default function UpcomingBookingBanner({ booking }: UpcomingBookingBanner
           </div>
           <div>
             <h3 className="font-bold text-lg leading-tight uppercase tracking-wide">
-              {booking.machineName} <span className="text-blue-200 font-medium text-sm ml-1">• {booking.floorLabel}</span>
+              {formatMachineName(booking.machineName)} <span className="text-teal-100 font-medium text-sm ml-1">• {booking.floorLabel}</span>
             </h3>
-            <p className="text-blue-100 text-sm mt-0.5">Upcoming Booking</p>
+            <p className="text-teal-50 text-sm mt-0.5">Upcoming Booking</p>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 self-stretch sm:self-auto w-full sm:w-auto">
           <div className="bg-black/10 sm:bg-transparent rounded-xl p-3 sm:p-0 flex flex-col justify-center">
-            <p className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-1">Reserved Slot</p>
+            <p className="text-xs text-teal-100 uppercase font-bold tracking-wider mb-1">Reserved Slot</p>
             <p className="text-xl sm:text-2xl font-bold leading-none flex items-center gap-2">
-              <span className="bg-blue-800/50 px-2 py-0.5 rounded text-sm sm:text-base">{displayDate}</span>
+              <span className="bg-teal-900/40 px-2 py-0.5 rounded text-sm sm:text-base">{displayDate}</span>
               {formatTime(booking.slot_start)}
             </p>
           </div>
@@ -84,7 +85,7 @@ export default function UpcomingBookingBanner({ booking }: UpcomingBookingBanner
           <button
             onClick={handleStartSession}
             disabled={loading}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-blue-50 transition-colors rounded-xl text-blue-700 shadow-md disabled:opacity-50 flex-1 sm:flex-none mt-2 sm:mt-0"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-teal-50 transition-colors rounded-xl text-teal-800 shadow-md disabled:opacity-50 flex-1 sm:flex-none mt-2 sm:mt-0"
             aria-label="Start Session"
           >
             <PlayCircle className="h-5 w-5" />

@@ -1,7 +1,7 @@
 {
-  "name": "WashBook App",
-  "short_name": "WashBook",
-  "description": "Smart Washing Machine Slot Booking",
+  "name": "LaundryLink App",
+  "short_name": "LaundryLink",
+  "description": "Smart Laundry Slot Booking",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

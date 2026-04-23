@@ -39,7 +39,7 @@ serve(async (req) => {
     
     const { record } = await req.json(); // The payload from the Supabase Postgres Webhook
     
-    if (record?.status !== 'completed' && record?.status !== 'ended_early') {
+    if (record?.status !== 'completed') {
         return new Response(JSON.stringify({ message: "Not a completion event" }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 200,
