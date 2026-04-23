@@ -40,7 +40,7 @@ export default function MachineCard({ machine, activeSession, floorLabel, onClic
     default:
       cardClass = 'border-slate-100 bg-white cursor-pointer';
       badgeClass = 'bg-slate-50 text-slate-600';
-      statusText = machine.status.toUpperCase();
+      statusText = (machine.status as any).toUpperCase();
   }
 
   const [timeLeft, setTimeLeft] = useState<string>('');

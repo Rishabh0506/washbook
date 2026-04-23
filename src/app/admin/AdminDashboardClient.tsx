@@ -80,6 +80,7 @@ export default function AdminDashboardClient({ initialMachines, initialSessions,
                     </span>
                 </div>
 
+                {initialSessions.length === 0 ? (
                     <div className="p-8 border border-dashed border-slate-200 rounded-2xl text-center bg-white/50">
                         <p className="text-slate-400 italic font-medium">No machines are currently running.</p>
                     </div>
