@@ -16,6 +16,7 @@ interface ActiveSessionBannerProps {
 export default function ActiveSessionBanner({ session, machine, floorLabel }: ActiveSessionBannerProps) {
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [isEnding, setIsEnding] = useState(false);
+  const [showWaitingAlert, setShowWaitingAlert] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +41,16 @@ export default function ActiveSessionBanner({ session, machine, floorLabel }: Ac
     const timer = setInterval(() => {
       const left = calculateTimeLeft();
       setTimeLeft(left);
+      
+      // Update waiting alert status
+      if (session?.notified_at) {
+        const notifiedTime = new Date(session.notified_at).getTime();
+        const now = new Date().getTime();
+        setShowWaitingAlert(now - notifiedTime < 10 * 60 * 1000);
+      } else {
+        setShowWaitingAlert(false);
+      }
+
       if (left === 'Done') clearInterval(timer);
     }, 1000);
 
@@ -69,7 +80,7 @@ export default function ActiveSessionBanner({ session, machine, floorLabel }: Ac
       <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full mix-blend-overlay pointer-events-none" />
 
       {/* Someone is waiting alert */}
-      {session.notified_at && new Date().getTime() - new Date(session.notified_at).getTime() < 10 * 60 * 1000 && (
+      {showWaitingAlert && (
         <div className="mb-4 bg-red-500/90 border border-red-400 rounded-xl p-3 flex items-center justify-center gap-2 animate-pulse shadow-sm relative z-10">
           <AlertCircle className="h-5 w-5 text-white" />
           <span className="font-bold text-sm tracking-wide">Someone is waiting! Please end your session and free the machine.</span>

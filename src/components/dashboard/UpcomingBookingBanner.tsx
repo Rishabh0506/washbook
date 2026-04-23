@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PlayCircle, Calendar, AlertCircle } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,22 @@ interface UpcomingBookingBannerProps {
 export default function UpcomingBookingBanner({ booking }: UpcomingBookingBannerProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [displayDate, setDisplayDate] = useState<string>('');
   const router = useRouter();
+
+  useEffect(() => {
+    if (!booking?.slot_start) return;
+
+    const slotDate = new Date(booking.slot_start);
+    const now = new Date();
+    
+    const isToday = slotDate.toDateString() === now.toDateString();
+    const dateStr = isToday 
+      ? 'Today' 
+      : slotDate.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric' });
+    
+    setDisplayDate(dateStr);
+  }, [booking?.slot_start]);
 
   if (!booking) return null;
 
@@ -46,8 +61,6 @@ export default function UpcomingBookingBanner({ booking }: UpcomingBookingBanner
     return new Date(dateStr).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
   };
 
-  const isToday = new Date(booking.slot_start).setHours(0,0,0,0) === new Date().setHours(0,0,0,0);
-  const displayDate = isToday ? 'Today' : new Date(booking.slot_start).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric' });
 
   return (
     <div className="mb-6 bg-gradient-to-r from-[#004d40] to-[#00695c] rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">

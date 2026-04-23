@@ -67,7 +67,7 @@ export default function LoginPage() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-700">
-                College Email
+                Email
               </label>
               <div className="mt-1">
                 <input
@@ -79,7 +79,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-colors"
-                  placeholder="e.g. u20240078@college.edu"
+                  placeholder="e.g. u20240078@email.edu"
                 />
               </div>
             </div>

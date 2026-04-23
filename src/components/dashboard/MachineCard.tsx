@@ -44,73 +44,78 @@ export default function MachineCard({ machine, activeSession, floorLabel, onClic
   }
 
   const [timeLeft, setTimeLeft] = useState<string>('');
+  const [progressPercent, setProgressPercent] = useState<number>(0);
+  const [hasBeenNotifiedRecently, setHasBeenNotifiedRecently] = useState(false);
+  const [notifyTimeLeft, setNotifyTimeLeft] = useState('');
   const [notifyLoading, setNotifyLoading] = useState(false);
 
   useEffect(() => {
     if (machine.status !== 'occupied' || !activeSession?.start_time) {
       setTimeLeft('');
+      setProgressPercent(0);
+      setHasBeenNotifiedRecently(false);
+      setNotifyTimeLeft('');
       return;
     }
 
     const calculateTime = () => {
       const startTime = new Date(activeSession.start_time).getTime();
-      const endTime = startTime + 45 * 60 * 1000; // 45 minutes
+      const duration = 45 * 60 * 1000; // 45 minutes
+      const endTime = startTime + duration;
       const now = new Date().getTime();
       const diff = endTime - now;
+      const elapsed = now - startTime;
 
+      // 1. Progress and Time Left
       if (diff <= 0) {
         const lateMinutes = Math.floor(Math.abs(diff) / 1000 / 60);
         setTimeLeft(`Late by ${lateMinutes} min${lateMinutes === 1 ? '' : 's'}`);
-        return;
+        setProgressPercent(100);
+      } else {
+        const minutes = Math.floor(diff / 1000 / 60);
+        setTimeLeft(`${minutes} min${minutes === 1 ? '' : 's'} left`);
+        setProgressPercent(Math.min(100, Math.max(0, (elapsed / duration) * 100)));
       }
 
-      const minutes = Math.floor(diff / 1000 / 60);
-      setTimeLeft(`${minutes} min${minutes === 1 ? '' : 's'} left`);
+      // 2. Notification status for non-occupants
+      const isOccupant = activeSession.user_id === currentUserId;
+      const isLateValue = diff <= 0;
+      
+      if (!isOccupant && isLateValue && activeSession.notified_at) {
+        const notifiedTime = new Date(activeSession.notified_at).getTime();
+        const diffSinceNotify = now - notifiedTime;
+        if (diffSinceNotify < 10 * 60 * 1000) {
+          setHasBeenNotifiedRecently(true);
+          const minsLeft = Math.ceil((10 * 60 * 1000 - diffSinceNotify) / 60000);
+          setNotifyTimeLeft(`${minsLeft}m`);
+        } else {
+          setHasBeenNotifiedRecently(false);
+          setNotifyTimeLeft('');
+        }
+      } else {
+        setHasBeenNotifiedRecently(false);
+        setNotifyTimeLeft('');
+      }
     };
 
     calculateTime();
-    const interval = setInterval(calculateTime, 60000); // update every minute
+    const interval = setInterval(calculateTime, 10000); // update every 10 seconds for better responsiveness
 
     return () => clearInterval(interval);
-  }, [machine.status, activeSession]);
-
-  // Calculate progress for occupied
-  let progressPercent = 0;
-  if (machine.status === 'occupied' && activeSession?.start_time) {
-    const startTime = new Date(activeSession.start_time).getTime();
-    const duration = 45 * 60 * 1000;
-    const now = new Date().getTime();
-    const elapsed = now - startTime;
-    progressPercent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
-  }
+  }, [machine.status, activeSession, currentUserId]);
 
   // Adjust icon styles for new design
   let iconBgClass = 'bg-slate-200 text-slate-500';
   if (machine.status === 'free') iconBgClass = 'bg-green-100 text-green-700';
-  if (machine.status === 'occupied') iconBgClass = 'bg-slate-200 text-slate-600'; // the image shows a grey box
+  if (machine.status === 'occupied') iconBgClass = 'bg-slate-200 text-slate-600'; 
 
   // Notified UI rules
   const isOccupant = activeSession?.user_id === currentUserId;
   const isLate = timeLeft.startsWith('Late');
   let canNotify = false;
-  let hasBeenNotifiedRecently = false;
-  let notifyTimeLeft = '';
 
-  if (machine.status === 'occupied' && !isOccupant && isLate) {
-    if (activeSession?.notified_at) {
-      const notifiedTime = new Date(activeSession.notified_at).getTime();
-      const now = new Date().getTime();
-      const diffSinceNotify = now - notifiedTime;
-      if (diffSinceNotify < 10 * 60 * 1000) {
-        hasBeenNotifiedRecently = true;
-        const minsLeft = Math.ceil((10 * 60 * 1000 - diffSinceNotify) / 60000);
-        notifyTimeLeft = `${minsLeft}m`;
-      } else {
-        canNotify = true;
-      }
-    } else {
-      canNotify = true;
-    }
+  if (machine.status === 'occupied' && !isOccupant && isLate && !hasBeenNotifiedRecently) {
+    canNotify = true;
   }
 
   const handleNotify = async (e: React.MouseEvent) => {

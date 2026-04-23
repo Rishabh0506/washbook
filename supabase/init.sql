@@ -130,18 +130,24 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
--- Seed Data (Floors 1, 3, 5, 7 and the 1 machine on each)
+-- Seed Data (Floors 1 through 7 and one machine on each)
 insert into floors (floor_id, label) values 
   (1, 'Floor 1'),
-  (2, 'Floor 3'),
-  (3, 'Floor 5'),
-  (4, 'Floor 7');
+  (2, 'Floor 2'),
+  (3, 'Floor 3'),
+  (4, 'Floor 4'),
+  (5, 'Floor 5'),
+  (6, 'Floor 6'),
+  (7, 'Floor 7');
   
 insert into machines (floor_id, name) values
-  (1, 'M1 - F1'),
-  (2, 'M1 - F3'),
-  (3, 'M1 - F5'),
-  (4, 'M1 - F7');
+  (1, 'Washing Machine - F1'),
+  (2, 'Washing Machine - F2'),
+  (3, 'Washing Machine - F3'),
+  (4, 'Washing Machine - F4'),
+  (5, 'Washing Machine - F5'),
+  (6, 'Washing Machine - F6'),
+  (7, 'Washing Machine - F7');
 
 -- RLS Policies (enable on all tables)
 alter table profiles  enable row level security;
